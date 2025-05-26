@@ -441,21 +441,23 @@ export function MindMap({ data }: MindMapProps) {
   );
 }
 
-// Add CSS animation for dash effect
-const style = document.createElement("style");
-style.textContent = `
-  @keyframes dash {
-    from { stroke-dashoffset: 30; }
-    to { stroke-dashoffset: 0; }
-  }
-  
-  @keyframes spin-slow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  
-  .animate-spin-slow {
-    animation: spin-slow 8s linear infinite;
-  }
-`;
-document.head.appendChild(style);
+// Add CSS animation for dash effect (only on client side)
+if (typeof document !== "undefined") {
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes dash {
+      from { stroke-dashoffset: 30; }
+      to { stroke-dashoffset: 0; }
+    }
+    
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    .animate-spin-slow {
+      animation: spin-slow 8s linear infinite;
+    }
+  `;
+  document.head.appendChild(style);
+}
