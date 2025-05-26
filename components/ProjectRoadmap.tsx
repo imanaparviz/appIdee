@@ -112,6 +112,9 @@ export function ProjectRoadmap({ roadmap, projectTitle }: ProjectRoadmapProps) {
   const [openPhases, setOpenPhases] = useState<Set<number>>(new Set([1]));
   const [activeAssistant, setActiveAssistant] = useState<string | null>(null);
 
+  // Ensure roadmap is always an array
+  const safeRoadmap = Array.isArray(roadmap) ? roadmap : [];
+
   const toggleTask = (taskId: string) => {
     const newCompleted = new Set(completedTasks);
     if (newCompleted.has(taskId)) {
@@ -140,8 +143,8 @@ export function ProjectRoadmap({ roadmap, projectTitle }: ProjectRoadmapProps) {
     }
   };
 
-  const totalTasks = roadmap.reduce(
-    (acc, phase) => acc + phase.tasks.length,
+  const totalTasks = safeRoadmap.reduce(
+    (acc, phase) => acc + (phase.tasks || []).length,
     0
   );
   const completedCount = Array.from(completedTasks).length;
@@ -166,7 +169,7 @@ export function ProjectRoadmap({ roadmap, projectTitle }: ProjectRoadmapProps) {
             variant="outline"
             className="text-sm font-semibold bg-gray-700 text-gray-200 border-gray-500"
           >
-            {roadmap.length} Phasen
+            {safeRoadmap.length} Phases
           </Badge>
           <Badge
             variant="outline"
@@ -178,7 +181,7 @@ export function ProjectRoadmap({ roadmap, projectTitle }: ProjectRoadmapProps) {
             variant="outline"
             className="text-sm font-semibold bg-gray-700 text-gray-200 border-gray-500"
           >
-            {Math.round(overallProgress)}% Abgeschlossen
+            {Math.round(overallProgress)}% Completed
           </Badge>
         </div>
       </div>
@@ -188,18 +191,18 @@ export function ProjectRoadmap({ roadmap, projectTitle }: ProjectRoadmapProps) {
         <div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 via-green-500 via-purple-500 to-orange-500 rounded-full shadow-lg"></div>
 
         <div className="space-y-6">
-          {roadmap.map((phase, index) => {
+          {safeRoadmap.map((phase, index) => {
             const IconComponent = getPhaseIcon(phase.phase);
             const config = getPhaseConfig(phase.phase);
             const isOpen = openPhases.has(phase.phase);
-            const phaseTasks = phase.tasks.map(
+            const phaseTasks = (phase.tasks || []).map(
               (task, taskIndex) => `${phase.phase}-${taskIndex}`
             );
             const completedInPhase = phaseTasks.filter((taskId) =>
               completedTasks.has(taskId)
             ).length;
             const progressPercent =
-              (completedInPhase / phase.tasks.length) * 100;
+              (completedInPhase / (phase.tasks || []).length) * 100;
             const isCompleted = progressPercent === 100;
 
             return (
@@ -262,7 +265,8 @@ export function ProjectRoadmap({ roadmap, projectTitle }: ProjectRoadmapProps) {
                                   variant="outline"
                                   className="font-semibold bg-gray-700 text-gray-200 border-gray-500"
                                 >
-                                  {completedInPhase}/{phase.tasks.length} Tasks
+                                  {completedInPhase}/
+                                  {(phase.tasks || []).length} Tasks
                                 </Badge>
                               </div>
                             </div>
@@ -298,10 +302,10 @@ export function ProjectRoadmap({ roadmap, projectTitle }: ProjectRoadmapProps) {
                         <div className="space-y-4">
                           <div className="flex items-center space-x-2 text-gray-200 font-semibold">
                             <CheckCircle className="w-5 h-5" />
-                            <span>Aufgaben & Meilensteine:</span>
+                            <span>Tasks & Milestones:</span>
                           </div>
                           <div className="grid gap-3">
-                            {phase.tasks.map((task, taskIndex) => {
+                            {(phase.tasks || []).map((task, taskIndex) => {
                               const taskId = `${phase.phase}-${taskIndex}`;
                               const isCompleted = completedTasks.has(taskId);
 
@@ -344,7 +348,7 @@ export function ProjectRoadmap({ roadmap, projectTitle }: ProjectRoadmapProps) {
                                           variant="outline"
                                           className="text-green-300 border-green-500 bg-green-900/30"
                                         >
-                                          ✅ Erledigt
+                                          ✅ Done
                                         </Badge>
                                       )}
                                       <Button
@@ -361,7 +365,7 @@ export function ProjectRoadmap({ roadmap, projectTitle }: ProjectRoadmapProps) {
                                         }}
                                       >
                                         <Bot className="w-4 h-4 mr-1" />
-                                        AI-Hilfe
+                                        AI Help
                                       </Button>
                                     </div>
                                   </div>
@@ -403,17 +407,17 @@ export function ProjectRoadmap({ roadmap, projectTitle }: ProjectRoadmapProps) {
               </div>
               <div>
                 <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-                  Gesamtfortschritt
+                  Overall Progress
                 </h3>
                 <p className="text-lg text-gray-300">
                   <span className="font-semibold text-indigo-400">
                     {completedCount}
                   </span>{" "}
-                  von{" "}
+                  of{" "}
                   <span className="font-semibold text-purple-400">
                     {totalTasks}
                   </span>{" "}
-                  Tasks abgeschlossen
+                  tasks completed
                 </p>
               </div>
             </div>

@@ -53,34 +53,34 @@ const getPhaseQuickActions = (phase: number, task: string): QuickAction[] => {
   const baseActions = [
     {
       id: "explain",
-      title: "📝 Task erklären",
-      description: "Detaillierte Erklärung der Aufgabe",
+      title: "📝 Explain Task",
+      description: "Detailed task explanation",
       icon: FileText,
-      prompt: `Erkläre mir diese Aufgabe Schritt für Schritt: "${task}"`,
+      prompt: `Explain this task step by step: "${task}"`,
       color: "bg-blue-500",
     },
     {
       id: "code",
-      title: "💻 Code Beispiele",
-      description: "Praktische Code-Snippets",
+      title: "💻 Code Examples",
+      description: "Practical code snippets",
       icon: Code,
-      prompt: `Zeige mir Code-Beispiele für: "${task}"`,
+      prompt: `Show me code examples for: "${task}"`,
       color: "bg-green-500",
     },
     {
       id: "checklist",
-      title: "✅ Checkliste",
-      description: "Step-by-step Checkliste",
+      title: "✅ Checklist",
+      description: "Step-by-step checklist",
       icon: CheckCircle,
-      prompt: `Erstelle eine detaillierte Checkliste für: "${task}"`,
+      prompt: `Create a detailed checklist for: "${task}"`,
       color: "bg-purple-500",
     },
     {
       id: "resources",
-      title: "📚 Ressourcen",
-      description: "Hilfreiche Links und Tools",
+      title: "📚 Resources",
+      description: "Helpful links and tools",
       icon: BookOpen,
-      prompt: `Welche Tools und Ressourcen brauche ich für: "${task}"?`,
+      prompt: `What tools and resources do I need for: "${task}"?`,
       color: "bg-orange-500",
     },
   ];
@@ -90,9 +90,9 @@ const getPhaseQuickActions = (phase: number, task: string): QuickAction[] => {
       {
         id: "requirements",
         title: "📋 Requirements",
-        description: "Anforderungen definieren",
+        description: "Define requirements",
         icon: HelpCircle,
-        prompt: `Hilf mir die Anforderungen für "${task}" zu definieren`,
+        prompt: `Help me define requirements for "${task}"`,
         color: "bg-cyan-500",
       },
     ],
@@ -100,9 +100,9 @@ const getPhaseQuickActions = (phase: number, task: string): QuickAction[] => {
       {
         id: "setup",
         title: "⚙️ Setup Guide",
-        description: "Entwicklungsumgebung",
+        description: "Development environment",
         icon: Terminal,
-        prompt: `Wie richte ich die Entwicklungsumgebung für "${task}" ein?`,
+        prompt: `How do I set up the development environment for "${task}"?`,
         color: "bg-yellow-500",
       },
     ],
@@ -110,9 +110,9 @@ const getPhaseQuickActions = (phase: number, task: string): QuickAction[] => {
       {
         id: "testing",
         title: "🧪 Testing",
-        description: "Test-Strategien",
+        description: "Test strategies",
         icon: Zap,
-        prompt: `Wie teste ich "${task}" richtig?`,
+        prompt: `How do I test "${task}" properly?`,
         color: "bg-red-500",
       },
     ],
@@ -120,9 +120,9 @@ const getPhaseQuickActions = (phase: number, task: string): QuickAction[] => {
       {
         id: "deployment",
         title: "🚀 Deployment",
-        description: "Deployment Guide",
+        description: "Deployment guide",
         icon: Github,
-        prompt: `Wie deploye ich "${task}" auf Production?`,
+        prompt: `How do I deploy "${task}" to production?`,
         color: "bg-indigo-500",
       },
     ],
@@ -139,7 +139,7 @@ const generateTaskSpecificGuidance = (
   phase: number,
   projectTitle: string
 ) => {
-  const phaseNames = ["Planung", "Development", "Testing", "Deployment"];
+  const phaseNames = ["Planning", "Development", "Testing", "Deployment"];
   const currentPhase = phaseNames[phase - 1] || "Development";
 
   const taskKeywords = task.toLowerCase();
@@ -157,44 +157,44 @@ const generateTaskSpecificGuidance = (
   let specificTips = "";
 
   if (isAPI) {
-    specificTips = `\n🔧 **API-spezifische Tipps:**
-• Definiere klare Endpunkte und HTTP-Methoden
-• Implementiere Fehlerbehandlung und Validierung
-• Dokumentiere mit OpenAPI/Swagger
-• Teste mit Postman oder Thunder Client`;
+    specificTips = `\n🔧 **API-specific Tips:**
+• Define clear endpoints and HTTP methods
+• Implement error handling and validation
+• Document with OpenAPI/Swagger
+• Test with Postman or Thunder Client`;
   } else if (isUI) {
-    specificTips = `\n🎨 **UI-spezifische Tipps:**
-• Verwende React Komponenten und Hooks
-• Implementiere responsives Design
-• Achte auf Accessibility (a11y)
-• Teste auf verschiedenen Bildschirmgrößen`;
+    specificTips = `\n🎨 **UI-specific Tips:**
+• Use React components and hooks
+• Implement responsive design
+• Focus on accessibility (a11y)
+• Test on different screen sizes`;
   } else if (isDatabase) {
-    specificTips = `\n🗄️ **Datenbank-spezifische Tipps:**
-• Plane die Datenbankstruktur im Voraus
-• Verwende Migrationen für Schema-Änderungen
-• Implementiere Indexes für Performance
-• Beachte Datenvalidierung und Constraints`;
+    specificTips = `\n🗄️ **Database-specific Tips:**
+• Plan database structure in advance
+• Use migrations for schema changes
+• Implement indexes for performance
+• Consider data validation and constraints`;
   } else if (isAuth) {
-    specificTips = `\n🔐 **Authentication-spezifische Tipps:**
-• Verwende sichere Password-Hashing (bcrypt)
-• Implementiere JWT oder Session-basierte Auth
-• Beachte OWASP Security Guidelines
-• Teste Edge Cases (falsche Credentials, etc.)`;
+    specificTips = `\n🔐 **Authentication-specific Tips:**
+• Use secure password hashing (bcrypt)
+• Implement JWT or session-based auth
+• Follow OWASP security guidelines
+• Test edge cases (wrong credentials, etc.)`;
   }
 
-  return `🤖 **AI-Assistent für "${task}"**
+  return `🤖 **AI Assistant for "${task}"**
 
 **Phase:** ${currentPhase} (${phase}/4)
-**Projekt:** ${projectTitle}
+**Project:** ${projectTitle}
 
-💡 **Was ich für dich tun kann:**
-• Schritt-für-Schritt Anleitungen geben
-• Code-Beispiele und Best Practices zeigen
-• Problems lösen und debuggen
-• Tools und Ressourcen empfehlen
-• Zeitschätzungen und Prioritäten setzen${specificTips}
+💡 **What I can do for you:**
+• Provide step-by-step instructions
+• Show code examples and best practices
+• Help solve problems and debug
+• Recommend tools and resources
+• Set time estimates and priorities${specificTips}
 
-🚀 **Los geht's!** Wähle eine Quick Action oder frag mich direkt etwas über diese Aufgabe!`;
+🚀 **Let's get started!** Choose a Quick Action or ask me directly about this task!`;
 };
 
 const generateAIResponse = async (
@@ -211,22 +211,22 @@ const generateAIResponse = async (
 
   if (
     lowerMessage.includes("code") ||
-    lowerMessage.includes("beispiel") ||
+    lowerMessage.includes("example") ||
     lowerMessage.includes("snippet")
   ) {
     messageType = "code";
-    response = `🔧 **Code-Beispiel für "${task}":**
+    response = `🔧 **Code Example for "${task}":**
 
 \`\`\`typescript
-// Beispiel Implementation für ${task}
+// Example implementation for ${task}
 const handle${task.replace(/\s+/g, "")} = async () => {
   try {
-    // TODO: Implementiere die Logic hier
-    console.log('${task} wird ausgeführt...');
+    // TODO: Implement the logic here
+    console.log('${task} is running...');
     
-    // Beispiel für ${
+    // Example for ${
       phase === 1
-        ? "Planung"
+        ? "Planning"
         : phase === 2
         ? "Development"
         : phase === 3
@@ -235,89 +235,89 @@ const handle${task.replace(/\s+/g, "")} = async () => {
     }
     ${
       phase === 1
-        ? "// Definiere Requirements und Datenstrukturen"
+        ? "// Define requirements and data structures"
         : phase === 2
-        ? "// Implementiere die Core-Funktionalität"
+        ? "// Implement core functionality"
         : phase === 3
-        ? "// Schreibe Tests und validiere"
-        : "// Prepare für Production Deployment"
+        ? "// Write tests and validate"
+        : "// Prepare for production deployment"
     }
     
-    return { success: true, message: '${task} erfolgreich!' };
+    return { success: true, message: '${task} completed successfully!' };
   } catch (error) {
-    console.error('Fehler in ${task}:', error);
+    console.error('Error in ${task}:', error);
     throw error;
   }
 };
 \`\`\`
 
 💡 **Next Steps:**
-1. Passe den Code an deine spezifischen Anforderungen an
-2. Füge Error Handling hinzu
-3. Teste die Funktionalität
-4. Dokumentiere den Code`;
+1. Adapt the code to your specific requirements
+2. Add error handling
+3. Test the functionality
+4. Document the code`;
   } else if (
-    lowerMessage.includes("checkliste") ||
-    lowerMessage.includes("schritte") ||
+    lowerMessage.includes("checklist") ||
+    lowerMessage.includes("steps") ||
     lowerMessage.includes("plan")
   ) {
     messageType = "checklist";
-    response = `✅ **Detaillierte Checkliste für "${task}":**
+    response = `✅ **Detailed Checklist for "${task}":**
 
-**🎯 Vorbereitung:**
-- [ ] Verstehe die genauen Anforderungen
-- [ ] Sammle alle notwendigen Assets/Daten
-- [ ] Definiere Akzeptanzkriterien
-- [ ] Schätze den Zeitaufwand
+**🎯 Preparation:**
+- [ ] Understand the exact requirements
+- [ ] Gather all necessary assets/data
+- [ ] Define acceptance criteria
+- [ ] Estimate time effort
 
 **⚡ Implementation:**
-- [ ] Erstelle die Grundstruktur
-- [ ] Implementiere die Core-Funktionalität
-- [ ] Füge Error Handling hinzu
-- [ ] Dokumentiere den Code
+- [ ] Create the basic structure
+- [ ] Implement core functionality
+- [ ] Add error handling
+- [ ] Document the code
 
 **🧪 Testing & Quality:**
-- [ ] Schreibe Unit Tests
-- [ ] Teste Edge Cases
-- [ ] Prüfe Performance
-- [ ] Code Review durchführen
+- [ ] Write unit tests
+- [ ] Test edge cases
+- [ ] Check performance
+- [ ] Conduct code review
 
-**🚀 Finalisierung:**
-- [ ] Integration testen
-- [ ] Dokumentation aktualisieren
-- [ ] Ready für ${phase === 4 ? "Production" : "nächste Phase"}
+**🚀 Finalization:**
+- [ ] Test integration
+- [ ] Update documentation
+- [ ] Ready for ${phase === 4 ? "production" : "next phase"}
 
-⏱️ **Geschätzte Zeit:** ${
+⏱️ **Estimated Time:** ${
       phase === 1
-        ? "2-4 Stunden"
+        ? "2-4 hours"
         : phase === 2
-        ? "4-8 Stunden"
+        ? "4-8 hours"
         : phase === 3
-        ? "2-3 Stunden"
-        : "1-2 Stunden"
+        ? "2-3 hours"
+        : "1-2 hours"
     }`;
   } else if (
-    lowerMessage.includes("ressource") ||
+    lowerMessage.includes("resource") ||
     lowerMessage.includes("tool") ||
     lowerMessage.includes("link")
   ) {
     messageType = "resource";
-    response = `📚 **Hilfreiche Ressourcen für "${task}":**
+    response = `📚 **Helpful Resources for "${task}":**
 
 **🛠️ Tools & Libraries:**
-• VS Code Extensions für bessere Productivity
-• React DevTools für Debugging
-• Postman für API Testing
-• Github Copilot für Code-Assistance
+• VS Code Extensions for better productivity
+• React DevTools for debugging
+• Postman for API testing
+• Github Copilot for code assistance
 
-**📖 Dokumentation:**
+**📖 Documentation:**
 • [MDN Web Docs](https://developer.mozilla.org) - Web Standards
 • [React Docs](https://react.dev) - React Framework
 • [Next.js Docs](https://nextjs.org/docs) - Next.js Features
 • [TypeScript Handbook](https://www.typescriptlang.org/docs)
 
 **🎥 Learning Resources:**
-• YouTube Tutorials zu ${task}
+• YouTube Tutorials for ${task}
 • FreeCodeCamp Guides
 • Dev.to Articles
 • Stack Overflow Community
@@ -330,90 +330,90 @@ const handle${task.replace(/\s+/g, "")} = async () => {
   } else {
     // General intelligent response
     const responses = [
-      `Für "${task}" in Phase ${phase} empfehle ich folgendes Vorgehen:
+      `For "${task}" in Phase ${phase} I recommend the following approach:
 
-**🎯 Hauptfokus:**
+**🎯 Main Focus:**
 ${
   phase === 1
-    ? "Detaillierte Planung und Requirements-Definition"
+    ? "Detailed planning and requirements definition"
     : phase === 2
-    ? "Saubere Implementation und Code-Qualität"
+    ? "Clean implementation and code quality"
     : phase === 3
-    ? "Umfassendes Testing und Bug-Fixing"
-    : "Stable Deployment und Monitoring"
+    ? "Comprehensive testing and bug fixing"
+    : "Stable deployment and monitoring"
 }
 
-**📋 Konkrete Schritte:**
+**📋 Concrete Steps:**
 1. **Start:** ${
         phase === 1
-          ? "Analysiere bestehende Anforderungen"
+          ? "Analyze existing requirements"
           : phase === 2
-          ? "Richte Entwicklungsumgebung ein"
+          ? "Set up development environment"
           : phase === 3
-          ? "Definiere Test-Cases"
-          : "Prepare Production Environment"
+          ? "Define test cases"
+          : "Prepare production environment"
       }
 2. **Core:** ${
         phase === 1
-          ? "Erstelle detaillierte Spezifikationen"
+          ? "Create detailed specifications"
           : phase === 2
-          ? "Implementiere Schritt für Schritt"
+          ? "Implement step by step"
           : phase === 3
-          ? "Führe alle Tests durch"
-          : "Deploy and Monitor"
+          ? "Run all tests"
+          : "Deploy and monitor"
       }
 3. **Finish:** ${
         phase === 1
-          ? "Review und Approval einholen"
+          ? "Get review and approval"
           : phase === 2
-          ? "Code Review und Refactoring"
+          ? "Code review and refactoring"
           : phase === 3
-          ? "Fix Bugs und optimiere"
-          : "Dokumentiere Deployment"
+          ? "Fix bugs and optimize"
+          : "Document deployment"
       }
 
-⚡ **Wichtiger Tipp:** ${
+⚡ **Important Tip:** ${
         phase === 1
-          ? "Nimm dir Zeit für gründliche Planung - das spart später Zeit!"
+          ? "Take time for thorough planning - it saves time later!"
           : phase === 2
-          ? "Schreibe sauberen, dokumentierten Code!"
+          ? "Write clean, documented code!"
           : phase === 3
-          ? "Teste auch Edge Cases und Error Scenarios!"
-          : "Monitor die Application nach dem Launch!"
+          ? "Test edge cases and error scenarios too!"
+          : "Monitor the application after launch!"
       }
 
-🤔 **Brauchst du Hilfe bei einem spezifischen Teil?**`,
+🤔 **Do you need help with a specific part?**`,
 
-      `Hier eine detaillierte Anleitung für "${task}":
+      `Here's a detailed guide for "${task}":
 
 **🚀 Quick Start Guide:**
-• **Verstehen:** Was genau soll erreicht werden?
-• **Planen:** Welche Schritte sind notwendig?
-• **Implementieren:** Schritt für Schritt vorgehen
-• **Testen:** Functionality und Edge Cases prüfen
+• **Understand:** What exactly needs to be achieved?
+• **Plan:** What steps are necessary?
+• **Implement:** Proceed step by step
+• **Test:** Check functionality and edge cases
 
-**🎯 Phase-spezifische Tipps:**
+**🎯 Phase-specific Tips:**
 ${
   phase === 1
-    ? "📋 In der Planungsphase: Sammle alle Requirements, erstelle User Stories, definiere Akzeptanzkriterien"
+    ? "📋 In planning phase: Gather all requirements, create user stories, define acceptance criteria"
     : phase === 2
-    ? "💻 In der Development-Phase: Implementiere incrementell, schreibe sauberen Code, dokumentiere"
+    ? "💻 In development phase: Implement incrementally, write clean code, document"
     : phase === 3
-    ? "🧪 In der Testing-Phase: Teste gründlich, automatisiere Tests, fix alle Bugs"
-    : "🚀 In der Deployment-Phase: Deploye sicher, monitore Performance, sammle User Feedback"
+    ? "🧪 In testing phase: Test thoroughly, automate tests, fix all bugs"
+    : "🚀 In deployment phase: Deploy safely, monitor performance, gather user feedback"
 }
 
-**💡 Pro-Tipp:** Für ${projectTitle} ist besonders wichtig, dass ${task} ${
+**💡 Pro Tip:** For ${projectTitle} it's especially important that ${task} is ${
         phase === 1
-          ? "gut geplant"
+          ? "well planned"
           : phase === 2
-          ? "performant implementiert"
+          ? "performantly implemented"
           : phase === 3
-          ? "thoroughly getestet"
-          : "stable deployed"
-      } wird.
+          ? "thoroughly tested"
+          : "stably deployed"
+      }.
 
-❓ **Hast du spezifische Fragen oder brauchst du Hilfe bei einem bestimmten Aspekt?**`,
+❓ **Do you have specific questions or need help with a particular aspect?**`,
     ];
 
     response = responses[Math.floor(Math.random() * responses.length)];
@@ -495,7 +495,7 @@ export function TaskAIChat({
       const errorMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         content:
-          "Entschuldigung, es gab einen Fehler. Bitte versuche es nochmal! 🔄",
+          "Sorry, there was an error. Please try again! 🔄",
         sender: "bot",
         timestamp: new Date(),
         type: "text",
@@ -652,7 +652,7 @@ export function TaskAIChat({
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Frag mich alles über diese Aufgabe..."
+              placeholder="Ask me anything about this task..."
               className="flex-1 bg-gray-700 border-gray-600 text-white placeholder-gray-400"
               disabled={isLoading}
             />

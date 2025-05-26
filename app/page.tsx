@@ -67,7 +67,7 @@ interface ProjectIdea {
 
 const navigationItems = [
   { title: "🏠 Home", icon: Home, url: "#", id: "home" },
-  { title: "💡 Projekt Ideen", icon: Lightbulb, url: "#", id: "ideas" },
+  { title: "💡 Project Ideas", icon: Lightbulb, url: "#", id: "ideas" },
   { title: "🗺️ Roadmaps", icon: MapPin, url: "#", id: "roadmaps" },
   { title: "✅ Task Manager", icon: CheckSquare, url: "#", id: "tasks" },
   { title: "📊 Analytics", icon: BarChart3, url: "#", id: "analytics" },
@@ -95,7 +95,7 @@ export default function FullstackDevAssistant() {
     {
       id: "1",
       content:
-        "Hallo! Ich bin dein Fullstack Development Assistant! 🚀 Erzähl mir von deiner Projektidee und ich helfe dir mit Mind Maps, Roadmaps und detaillierten Tasks!",
+        "Hello! I'm your Fullstack Development Assistant! 🚀 Tell me about your project idea and I'll help you with Mind Maps, Roadmaps and detailed Tasks!",
       sender: "bot",
       timestamp: new Date(),
     },
@@ -126,7 +126,7 @@ export default function FullstackDevAssistant() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          prompt: `Gib eine kurze, hilfreiche Antwort auf: ${currentInput}. Halte es unter 100 Wörtern und bleibe im Kontext von Webentwicklung.`,
+          prompt: `Give a short, helpful answer to: ${currentInput}. Keep it under 100 words and stay in the context of web development.`,
           type: "chat",
         }),
       });
@@ -137,7 +137,7 @@ export default function FullstackDevAssistant() {
         id: (Date.now() + 1).toString(),
         content:
           data.response ||
-          `Verstehe! "${currentInput}" - Das klingt interessant! Gib deine Idee im Hauptbereich ein, damit ich dir eine vollständige Projektanalyse mit Mind Map und Roadmap erstellen kann! 💡`,
+          `Got it! "${currentInput}" - That sounds interesting! Enter your idea in the main area so I can create a complete project analysis with Mind Map and Roadmap for you! 💡`,
         sender: "bot",
         timestamp: new Date(),
       };
@@ -145,7 +145,7 @@ export default function FullstackDevAssistant() {
     } catch (error) {
       const botMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        content: "Entschuldigung, es gab einen Fehler. Probiere es nochmal! 🔄",
+        content: "Sorry, there was an error. Please try again! 🔄",
         sender: "bot",
         timestamp: new Date(),
       };
@@ -175,12 +175,47 @@ export default function FullstackDevAssistant() {
         throw new Error(data.error);
       }
 
-      setProjectIdea(data);
+      // Validate and set project idea with fallback structure
+      const validatedData = {
+        projectIdea: data.projectIdea || `Project analysis for: ${aiPrompt}`,
+        mindMap: {
+          center: data.mindMap?.center || aiPrompt,
+          branches: Array.isArray(data.mindMap?.branches)
+            ? data.mindMap.branches
+            : [
+                {
+                  title: "Frontend",
+                  subtopics: ["React", "TypeScript", "Design"],
+                },
+                {
+                  title: "Backend",
+                  subtopics: ["API", "Database", "Server"],
+                },
+              ],
+        },
+        roadmap: Array.isArray(data.roadmap)
+          ? data.roadmap
+          : [
+              {
+                phase: 1,
+                title: "Planning",
+                percentage: "0-25%",
+                tasks: ["Setup", "Design", "Architecture"],
+                duration: "1-2 weeks",
+              },
+            ],
+        techStack: Array.isArray(data.techStack)
+          ? data.techStack
+          : ["React", "Next.js", "TypeScript"],
+        estimatedTime: data.estimatedTime || "4-6 weeks",
+      };
+
+      setProjectIdea(validatedData);
 
       // Success message in chat
       const successMessage: ChatMessage = {
         id: Date.now().toString(),
-        content: `🎉 Perfekt! Ich habe eine vollständige Projektanalyse für "${aiPrompt}" erstellt. Schau dir die Mind Map und Roadmap unten an!`,
+        content: `🎉 Perfect! I've created a complete project analysis for "${aiPrompt}". Check out the Mind Map and Roadmap below!`,
         sender: "bot",
         timestamp: new Date(),
       };
@@ -190,7 +225,7 @@ export default function FullstackDevAssistant() {
 
       // Error fallback with demo data
       setProjectIdea({
-        projectIdea: `Austrian Market Webcrawler\n\nEin intelligentes System für lokale Unternehmen, um Konkurrenz-Events und Aktionen in 15km Umkreis automatisch zu finden.`,
+        projectIdea: `Austrian Market Webcrawler\n\nAn intelligent system for local businesses to automatically find competitor events and actions within a 15km radius.`,
         mindMap: {
           center: "AT Crawler",
           branches: [
@@ -200,7 +235,7 @@ export default function FullstackDevAssistant() {
             },
             {
               title: "Targeting",
-              subtopics: ["Bäckerei", "Fleischerei", "Lokale", "Events"],
+              subtopics: ["Bakery", "Butchery", "Local", "Events"],
             },
             {
               title: "Location",
@@ -208,7 +243,7 @@ export default function FullstackDevAssistant() {
             },
             {
               title: "Results",
-              subtopics: ["Aktionen", "News", "Events", "Konkurrenz"],
+              subtopics: ["Actions", "News", "Events", "Competition"],
             },
           ],
         },
@@ -218,56 +253,56 @@ export default function FullstackDevAssistant() {
             title: "Setup & Planning",
             percentage: "0-25%",
             tasks: [
-              "Projekt Repository erstellen",
-              "Next.js App initialisieren",
-              "TypeScript konfigurieren",
-              "Tailwind CSS einrichten",
-              "Projekt Struktur planen",
+              "Create project repository",
+              "Initialize Next.js app",
+              "Configure TypeScript",
+              "Set up Tailwind CSS",
+              "Plan project structure",
             ],
-            duration: "1-2 Wochen",
+            duration: "1-2 weeks",
           },
           {
             phase: 2,
             title: "Frontend Development",
             percentage: "25-60%",
             tasks: [
-              "UI Komponenten entwickeln",
-              "Routing implementieren",
-              "State Management einrichten",
-              "API Integration",
-              "Responsive Design",
+              "Develop UI components",
+              "Implement routing",
+              "Set up state management",
+              "API integration",
+              "Responsive design",
             ],
-            duration: "3-4 Wochen",
+            duration: "3-4 weeks",
           },
           {
             phase: 3,
             title: "Backend Development",
             percentage: "60-85%",
             tasks: [
-              "Express Server aufsetzen",
-              "Database Schema erstellen",
-              "API Endpoints entwickeln",
-              "Authentication implementieren",
-              "Testing & Validation",
+              "Set up Express server",
+              "Create database schema",
+              "Develop API endpoints",
+              "Implement authentication",
+              "Testing & validation",
             ],
-            duration: "2-3 Wochen",
+            duration: "2-3 weeks",
           },
           {
             phase: 4,
             title: "Deployment & Launch",
             percentage: "85-100%",
             tasks: [
-              "Production Build",
-              "Database Migration",
-              "Environment Configuration",
-              "Domain & SSL Setup",
-              "Monitoring & Analytics",
+              "Production build",
+              "Database migration",
+              "Environment configuration",
+              "Domain & SSL setup",
+              "Monitoring & analytics",
             ],
-            duration: "1 Woche",
+            duration: "1 week",
           },
         ],
         techStack: ["React", "Next.js", "TypeScript", "Node.js", "PostgreSQL"],
-        estimatedTime: "7-10 Wochen",
+        estimatedTime: "7-10 weeks",
       });
     } finally {
       setIsLoading(false);
@@ -287,8 +322,8 @@ export default function FullstackDevAssistant() {
                 </span>
               </h1>
               <p className="text-gray-300 text-lg">
-                Dein intelligenter Begleiter für Webentwicklung - von der Idee
-                bis zum Launch! 🚀
+                Your intelligent companion for web development - from idea to
+                launch! 🚀
               </p>
             </div>
 
@@ -299,30 +334,30 @@ export default function FullstackDevAssistant() {
                   <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
                     <Brain className="w-6 h-6" />
                   </div>
-                  <span>💡 Deine Projektidee transformieren</span>
+                  <span>💡 Transform Your Project Idea</span>
                 </CardTitle>
                 <p className="text-blue-100 mt-2">
-                  Beschreibe deine Vision und ich erstelle eine komplette
-                  Projektanalyse mit Mind Map und Roadmap!
+                  Describe your vision and I'll create a complete project
+                  analysis with Mind Map and Roadmap!
                 </p>
               </CardHeader>
               <CardContent className="p-6 bg-gray-800/50 backdrop-blur-sm">
                 <form onSubmit={handleProjectIdeaSubmit} className="space-y-6">
                   <div className="relative">
                     <Textarea
-                      placeholder="🚀 Beschreibe deine Projektidee hier... 
+                      placeholder="🚀 Describe your project idea here... 
 
-Beispiele:
-• 'Ich möchte eine E-Commerce Website für Bücher mit Bewertungen und Empfehlungen erstellen'
-• 'Eine Social Media App für Fotografen mit Portfolio-Sharing und Kollaboration'  
-• 'Ein Task-Management Tool für Teams mit Zeiterfassung und Reporting'
-• 'Eine Lern-App für Sprachen mit KI-gestützten Übungen'"
+Examples:
+• 'I want to create an e-commerce website for books with reviews and recommendations'
+• 'A social media app for photographers with portfolio sharing and collaboration'  
+• 'A task management tool for teams with time tracking and reporting'
+• 'A language learning app with AI-powered exercises'"
                       value={aiPrompt}
                       onChange={(e) => setAiPrompt(e.target.value)}
                       className="min-h-[140px] resize-none border-2 border-gray-600 focus:border-blue-400 rounded-xl text-lg bg-gray-700 text-white placeholder-gray-400"
                     />
                     <div className="absolute bottom-3 right-3 text-sm text-gray-400">
-                      {aiPrompt.length}/500 Zeichen
+                      {aiPrompt.length}/500 characters
                     </div>
                   </div>
                   <Button
@@ -333,12 +368,12 @@ Beispiele:
                     {isLoading ? (
                       <>
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
-                        🤖 AI generiert Projektplan...
+                        🤖 AI generating project plan...
                       </>
                     ) : (
                       <>
                         <Send className="w-5 h-5 mr-3" />
-                        🚀 Projektplan mit AI erstellen
+                        🚀 Create Project Plan with AI
                       </>
                     )}
                   </Button>
@@ -354,7 +389,7 @@ Beispiele:
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2 text-white">
                       <FileText className="w-5 h-5 text-blue-400" />
-                      <span>📋 Projekt Übersicht</span>
+                      <span>📋 Project Overview</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -369,7 +404,7 @@ Beispiele:
                         <span className="text-sm font-semibold text-gray-300">
                           Tech Stack:
                         </span>
-                        {projectIdea.techStack.map((tech, index) => (
+                        {(projectIdea.techStack || []).map((tech, index) => (
                           <span
                             key={index}
                             className="px-3 py-1 bg-blue-600 text-blue-100 rounded-full text-sm"
@@ -382,7 +417,7 @@ Beispiele:
                       <div className="flex items-center space-x-4 text-sm text-gray-300">
                         <span className="flex items-center">
                           <Clock className="w-4 h-4 mr-1 text-blue-400" />
-                          Geschätzte Zeit: {projectIdea.estimatedTime}
+                          Estimated Time: {projectIdea.estimatedTime}
                         </span>
                       </div>
                     </div>
@@ -394,7 +429,7 @@ Beispiele:
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2 text-white">
                       <Brain className="w-5 h-5 text-purple-400" />
-                      <span>🧠 Projekt Mind Map</span>
+                      <span>🧠 Project Mind Map</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -407,7 +442,7 @@ Beispiele:
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2 text-white">
                       <MapPin className="w-5 h-5 text-green-400" />
-                      <span>🗺️ Entwicklungs-Roadmap</span>
+                      <span>🗺️ Development Roadmap</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -428,10 +463,10 @@ Beispiele:
             <div className="text-center">
               <Code className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-300 mb-2">
-                Funktion in Entwicklung
+                Feature in Development
               </h3>
               <p className="text-gray-400">
-                Diese Sektion wird bald verfügbar sein!
+                This section will be available soon!
               </p>
             </div>
           </div>
@@ -539,7 +574,7 @@ Beispiele:
           <div className="p-4 border-t border-gray-700">
             <form onSubmit={handleChatSubmit} className="flex space-x-2">
               <Input
-                placeholder="Frag mich alles über Entwicklung..."
+                placeholder="Ask me anything about development..."
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 className="flex-1 bg-gray-700 border-gray-600 text-white placeholder-gray-400"

@@ -110,6 +110,12 @@ export function MindMap({ data }: MindMapProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [animationPhase, setAnimationPhase] = useState(0);
 
+  // Ensure data structure is valid
+  const safeData = {
+    center: data?.center || "Project",
+    branches: Array.isArray(data?.branches) ? data.branches : [],
+  };
+
   useEffect(() => {
     const timer1 = setTimeout(() => setIsVisible(true), 300);
     const timer2 = setTimeout(() => setAnimationPhase(1), 800);
@@ -149,7 +155,7 @@ export function MindMap({ data }: MindMapProps) {
       >
         <defs>
           {/* Gradient definitions */}
-          {data.branches.map((_, index) => {
+          {safeData.branches.map((_, index) => {
             const color = getDarkColorForBranch(index);
             return (
               <g key={index}>
@@ -206,8 +212,8 @@ export function MindMap({ data }: MindMapProps) {
         </defs>
 
         {/* Animated connection lines */}
-        {data.branches.map((branch, index) => {
-          const angle = (360 / data.branches.length) * index - 90;
+        {safeData.branches.map((branch, index) => {
+          const angle = (360 / safeData.branches.length) * index - 90;
           const radius = 280;
           const x = Math.cos((angle * Math.PI) / 180) * radius + 400;
           const y = Math.sin((angle * Math.PI) / 180) * radius + 400;
@@ -248,7 +254,7 @@ export function MindMap({ data }: MindMapProps) {
 
               {/* Sub-branches */}
               {animationPhase >= 2 &&
-                branch.subtopics.slice(0, 3).map((_, subIndex) => {
+                (branch.subtopics || []).slice(0, 3).map((_, subIndex) => {
                   const subAngle = angle + (subIndex - 1) * 15;
                   const subRadius = radius + 120;
                   const subX =
@@ -310,7 +316,7 @@ export function MindMap({ data }: MindMapProps) {
           >
             <Brain className="w-6 h-6 mr-2 text-blue-400 animate-pulse" />
             <span className="text-center bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent text-sm">
-              {data.center}
+              {safeData.center}
             </span>
           </div>
 
@@ -331,8 +337,8 @@ export function MindMap({ data }: MindMapProps) {
       </div>
 
       {/* Enhanced Branch Nodes */}
-      {data.branches.map((branch, index) => {
-        const angle = (360 / data.branches.length) * index - 90;
+      {safeData.branches.map((branch, index) => {
+        const angle = (360 / safeData.branches.length) * index - 90;
         const radius = 280;
         const x = Math.cos((angle * Math.PI) / 180) * radius;
         const y = Math.sin((angle * Math.PI) / 180) * radius;
@@ -389,7 +395,7 @@ export function MindMap({ data }: MindMapProps) {
 
             {/* Enhanced Subtopic Nodes */}
             {animationPhase >= 2 &&
-              branch.subtopics.slice(0, 3).map((subtopic, subIndex) => {
+              (branch.subtopics || []).slice(0, 3).map((subtopic, subIndex) => {
                 const subAngle = angle + (subIndex - 1) * 15;
                 const subRadius = radius + 120;
                 const subX = Math.cos((subAngle * Math.PI) / 180) * subRadius;

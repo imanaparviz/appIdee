@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
 
     if (!prompt) {
       return NextResponse.json(
-        { error: "Prompt ist erforderlich" },
+        { error: "Prompt is required" },
         { status: 400 }
       );
     }
@@ -20,18 +20,18 @@ export async function POST(request: NextRequest) {
 
     switch (type) {
       case "project-idea":
-        systemPrompt = `Du bist ein erfahrener Fullstack-Entwickler-Assistent. 
-        Erstelle basierend auf der Benutzereingabe:
-        1. Eine detaillierte Projektidee
-        2. Eine klare Mind Map Struktur (in JSON Format)
-        3. Eine Roadmap mit Phasen von 0-100%
-        4. Konkrete Tasks für jede Phase
+        systemPrompt = `You are an experienced fullstack developer assistant. 
+        Create based on the user input:
+        1. A detailed project idea
+        2. A clear mind map structure (in JSON format)
+        3. A roadmap with phases from 0-100%
+        4. Concrete tasks for each phase
         
-        Antworte im JSON Format:
+        Respond in JSON format:
         {
-          "projectIdea": "Detaillierte Projektbeschreibung",
+          "projectIdea": "Detailed project description",
           "mindMap": {
-            "center": "Hauptthema",
+            "center": "Main topic",
             "branches": [
               {
                 "title": "Frontend",
@@ -49,34 +49,34 @@ export async function POST(request: NextRequest) {
               "title": "Setup & Planning",
               "percentage": "0-20%",
               "tasks": ["Task 1", "Task 2"],
-              "duration": "1-2 Wochen"
+              "duration": "1-2 weeks"
             }
           ],
           "techStack": ["React", "Next.js", "Node.js"],
-          "estimatedTime": "4-6 Wochen"
+          "estimatedTime": "4-6 weeks"
         }`;
         break;
 
       case "roadmap":
-        systemPrompt = `Erstelle eine detaillierte Roadmap für das gegebene Projekt.
-        Teile es in klare Phasen auf von 0-100% mit konkreten Tasks und Zeitschätzungen.`;
+        systemPrompt = `Create a detailed roadmap for the given project.
+        Divide it into clear phases from 0-100% with concrete tasks and time estimates.`;
         break;
 
       case "tasks":
-        systemPrompt = `Erstelle eine detaillierte Task-Liste für die gegebene Projektphase.
-        Jeder Task sollte konkret und umsetzbar sein.`;
+        systemPrompt = `Create a detailed task list for the given project phase.
+        Each task should be concrete and actionable.`;
         break;
     }
 
     const result = await model.generateContent([
       systemPrompt,
-      `Benutzereingabe: ${prompt}`,
+      `User input: ${prompt}`,
     ]);
 
     const response = await result.response;
     const text = response.text();
 
-    // Versuche JSON zu parsen, falls nicht möglich, gib Text zurück
+    // Try to parse JSON, if not possible, return text
     let parsedResponse;
     try {
       parsedResponse = JSON.parse(text);
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Gemini API Error:", error);
     return NextResponse.json(
-      { error: "Fehler bei der AI-Generierung" },
+      { error: "Error in AI generation" },
       { status: 500 }
     );
   }
